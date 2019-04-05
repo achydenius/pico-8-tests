@@ -1,16 +1,10 @@
-pico-8 cartridge // http://www.pico-8.com
-version 16
-__lua__
+require("polygon")
 
 points = {
-  { -20, 20, 20 },
-  { 20, 20, 20 },
-  { 20, -20, 20 },
-  { -20, -20, 20 },
-  { -20, 20, -20 },
-  { 20, 20, -20 },
-  { 20, -20, -20 },
-  { -20, -20, -20 }
+  { -20, 20, 0 },
+  { 20, 20, 0 },
+  { 20, -20, 0 },
+  { -20, -20, 0 }
 }
 updated = {}
 projected = {}
@@ -55,32 +49,8 @@ function project(vector, d)
   }
 end
 
-function get_size(z)
-  if z > 10 then
-    return 1
-  elseif z > 0 then
-    return 2
-  elseif z > -10 then
-    return 3
-  else
-    return 4
-  end
-end
-
-function get_sprite(z)
-  if z > 10 then
-    return 3
-  elseif z > 0 then
-    return 2
-  elseif z > -10 then
-    return 1
-  else
-    return 0
-  end
-end
-
 function _update()
-  local matrix = get_rotation(anim, anim * 0.5, anim * 0.25)
+  local matrix = get_rotation(0, anim * 0.25, anim * 0.5)
 
   for i = 1, #points do
     updated[i] = multiply(points[i], matrix)
@@ -91,7 +61,5 @@ end
 
 function _draw()
   cls(0)
-  for i = 1, #updated do
-    spr(get_sprite(updated[i][3]), projected[i][1], projected[i][2])
-  end
+  render(projected, 7)
 end
