@@ -1,4 +1,6 @@
-function trace(a, b, table)
+local renderer = {}
+
+local function trace(a, b, table)
   if a[2] > b[2] then
     a, b = b, a
   end
@@ -16,7 +18,7 @@ function trace(a, b, table)
   end
 end
 
-function render(vertices, color)
+renderer.render = function(vertices, color)
   local left, right = {}, {}
 
   -- Clear edge tables
@@ -48,3 +50,5 @@ function render(vertices, color)
     end
   end
 end
+
+return renderer
