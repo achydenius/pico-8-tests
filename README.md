@@ -2,4 +2,4 @@
 
 [picotool](https://github.com/dansanderson/picotool) is required.
 
-Build with `make` and run with `pico8 -run cart.png`.
+Generate demo model with `python utils/obj-parser.py torus.obj > model.lua`. Build with `make` and run with `pico8 -run cart`.

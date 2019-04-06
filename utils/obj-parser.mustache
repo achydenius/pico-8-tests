@@ -1,0 +1,12 @@
+return {
+    vertices = {
+        {{#vertices}}
+        { {{x}}, {{y}}, {{z}} }{{^last_vertex}},{{/last_vertex}}
+        {{/vertices}}
+    },
+    faces = {
+        {{#faces}}
+        { {{#indices}}{{index}}{{^last_index}}, {{/last_index}}{{/indices}} }{{^last_face}},{{/last_face}}
+        {{/faces}}
+    }
+}
