@@ -8,5 +8,10 @@ return {
         {{#faces}}
         { {{#indices}}{{index}}{{^last_index}}, {{/last_index}}{{/indices}} }{{^last_face}},{{/last_face}}
         {{/faces}}
+    },
+    face_normals = {
+        {{#face_normals}}
+        { {{x}}, {{y}}, {{z}} }{{^last_face_normal}},{{/last_face_normal}}
+        {{/face_normals}}
     }
 }
