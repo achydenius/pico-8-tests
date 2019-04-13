@@ -18,23 +18,12 @@ local function trace(a, b, table)
   end
 end
 
-renderer.render = function(vertices, normal)
+renderer.render = function(vertices, color, winding)
   local left, right = {}, {}
 
   -- Clear edge tables
   for i = 1, 128 do
     left[i], right[i] = -1, -1
-  end
-
-  -- Define winding
-  local winding = 0
-  for i = 1, #vertices do
-    local a, b = vertices[i], vertices[(i % #vertices) + 1]
-    winding += (b[1] - a[1]) * (b[2] + a[2])
-  end
-
-  if winding > 0 then
-    return
   end
 
   -- Trace edges
@@ -46,17 +35,6 @@ renderer.render = function(vertices, normal)
 
     trace(a, b, table)
   end
-
-  -- Define color
-  local palette = { 1, 5, 6, 7 }
-  local index = flr(-normal[3] * #palette) + 1
-  if index < 1 then
-    index = 1
-  elseif index > #palette then
-    index = #palette
-  end
-
-  local color = palette[index]
 
   -- Rasterize
   for y = 1, 128 do
