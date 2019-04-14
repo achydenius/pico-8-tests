@@ -30,6 +30,7 @@ function _update()
       vertices[j] = projected[face[j]]
     end
 
+    -- Define distance
     local z = 0
     for j = 1, #face do
       z += updated[face[j]][3]
@@ -43,20 +44,9 @@ function _update()
     end
 
     if winding < 0 then
-      -- Define color
-      local palette = { 1, 5, 6, 7 }
-      local index = flr(-updated_normals[i][3] * #palette) + 1
-      if index < 1 then
-        index = 1
-      elseif index > #palette then
-        index = #palette
-      end
-
-      local color = palette[index]
-
       add(visible_faces, {
         vertices = vertices,
-        color = color,
+        angle = -updated_normals[i][3],
         winding = winding,
         z = z
       })
@@ -68,10 +58,27 @@ function _update()
   anim += 0.01
 end
 
+local function dithered_color(angle)
+  local palette = { 1, 5, 6, 7 }
+
+  local scaled = flr(angle * (#palette * 2 - 1)) + 1
+
+  local color
+  if band(scaled, 1) == 1 then
+    fillp()
+    color = palette[shr(scaled + 1, 1)]
+  else
+    fillp(0b0101101001011010)
+    local index = shr(scaled, 1)
+    color = bor(palette[index + 1], shl(palette[index], 4))
+  end
+
+  return color
+end
+
 function _draw()
   cls(12)
   for i = 1, #visible_faces do
-    local face = visible_faces[i]
-    renderer.render(face.vertices, face.color, face.winding)
+    renderer.render(visible_faces[i], dithered_color)
   end
 end

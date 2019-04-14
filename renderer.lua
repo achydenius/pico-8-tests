@@ -18,7 +18,7 @@ local function trace(a, b, table)
   end
 end
 
-renderer.render = function(vertices, color, winding)
+renderer.render = function(face, color_func)
   local left, right = {}, {}
 
   -- Clear edge tables
@@ -27,14 +27,17 @@ renderer.render = function(vertices, color, winding)
   end
 
   -- Trace edges
-  for i = 1, #vertices do
-    local a, b = vertices[i], vertices[(i % #vertices) + 1]
-    local table = ((winding < 0 and a[2] > b[2]) or (winding > 0 and a[2] < b[2]))
+  for i = 1, #face.vertices do
+    local a, b = face.vertices[i], face.vertices[(i % #face.vertices) + 1]
+    local table = ((face.winding < 0 and a[2] > b[2]) or (face.winding > 0 and a[2] < b[2]))
       and left
       or right
 
     trace(a, b, table)
   end
+
+  -- Define color
+  local color = color_func(face.angle)
 
   -- Rasterize
   for y = 1, 128 do
