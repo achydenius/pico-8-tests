@@ -1,5 +1,13 @@
 local math = {}
 
+math.matrix_identity = function()
+  return {
+    1, 0, 0,
+    0, 1, 0,
+    0, 0, 1
+  }
+end
+
 math.matrix_rotation = function(x, y, z)
   return {
     {

@@ -1,4 +1,4 @@
-local renderer = {}
+local rasterizer = {}
 
 local function trace(a, b, table)
   if a[2] > b[2] then
@@ -18,7 +18,25 @@ local function trace(a, b, table)
   end
 end
 
-renderer.render = function(face, color_func)
+rasterizer.dithered_func = function(angle)
+  local palette = { 1, 5, 6, 7 }
+
+  local scaled = flr(angle * (#palette * 2 - 1)) + 1
+
+  local color
+  if band(scaled, 1) == 1 then
+    fillp()
+    color = palette[shr(scaled + 1, 1)]
+  else
+    fillp(0b0101101001011010)
+    local index = shr(scaled, 1)
+    color = bor(palette[index + 1], shl(palette[index], 4))
+  end
+
+  return color
+end
+
+rasterizer.rasterize = function(face, color_func)
   local left, right = {}, {}
 
   -- Clear edge tables
@@ -48,4 +66,4 @@ renderer.render = function(face, color_func)
   end
 end
 
-return renderer
+return rasterizer
